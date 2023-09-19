@@ -37,15 +37,7 @@ function getFile (screenname, filename, callback) {
 				callback ({message});
 				}
 			else {
-				const theFile = {
-					screenname: result [0].screenname,
-					filename: result [0].filename,
-					filecontents: result [0].filecontents.toString (),
-					whenCreated: result [0].whenCreated,
-					whenUpdated: result [0].whenUpdated,
-					ctSaves: result [0].ctSaves
-					}
-				callback (undefined, theFile);
+				callback (undefined, result [0]);
 				}
 			}
 		});
@@ -75,9 +67,6 @@ function saveFile (screenname, filename, filecontents, callback) {
 				}
 			});
 		});
-	
-	
-	
 	}
 
 var theTestData = {
