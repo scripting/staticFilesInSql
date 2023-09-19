@@ -1,0 +1,11 @@
+{
+	"name": "staticfilesinsql",
+	"description": "Manage static files for users in a MySQL table.",
+	"version": "0.4.0",
+	"main": "staticfilesinsql.js",
+	"dependencies" : {
+		"request": "*",
+		"daveutils": "*",
+		"davesql": "*"
+		}
+	}
