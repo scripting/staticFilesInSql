@@ -26,7 +26,7 @@ function readConfig (f, config, callback) {
 	}
 
 function getFile (screenname, relpath, flprivate, callback) {
-	const sqltext = "select * from staticfiles where screenname = " + davesql.encode (screenname) + " and relpath = " + davesql.encode (relpath) + " and flprivate = " + davesql.encode (flprivate);
+	const sqltext = "select * from staticfiles where screenname = " + davesql.encode (screenname) + " and relpath = " + davesql.encode (relpath) + " and flprivate = " + davesql.encode (flprivate) + ";";
 	davesql.runSqltext (sqltext, function (err, result) {
 		if (err) {
 			callback (err);
@@ -59,7 +59,7 @@ function publishFile (screenname, relpath, type, flprivate, filecontents, callba
 			fileRec.whenCreated = theOriginalFile.whenCreated;
 			fileRec.ctSaves = theOriginalFile.ctSaves + 1;
 			}
-		const sqltext = "replace into staticfiles " + davesql.encodeValues (fileRec);
+		const sqltext = "replace into staticfiles " + davesql.encodeValues (fileRec) + ";";
 		davesql.runSqltext (sqltext, function (err, result) {
 			if (err) {
 				callback (err);
