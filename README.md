@@ -8,5 +8,5 @@ We need to get static files for users in FeedLand and have been having trouble g
 
 Here's the command to create the table.
 
-```code SQLcreate table staticfiles (	screenname  varchar (255), 	filename varchar (255), 	filecontents text,	whenCreated datetime, 	whenUpdated datetime, 	ctSaves int default 0,	primary key (screenname, filename)	);```
+```code SQLcreate table staticfiles (	screenname  varchar (255), 	relpath varchar (255), 	type varchar (64),	filecontents text,	flprivate boolean,	whenCreated datetime, 	whenUpdated datetime, 	ctSaves int default 0,	primary key (screenname, relpath, flprivate)	);```
 

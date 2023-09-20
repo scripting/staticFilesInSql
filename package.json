@@ -1,7 +1,7 @@
 {
 	"name": "staticfilesinsql",
 	"description": "Manage static files for users in a MySQL table.",
-	"version": "0.4.0",
+	"version": "0.4.1",
 	"main": "staticfilesinsql.js",
 	"dependencies" : {
 		"request": "*",

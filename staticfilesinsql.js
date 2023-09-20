@@ -1,4 +1,4 @@
-var myProductName = "staticfilesinsql", myVersion = "0.4.0";
+var myProductName = "staticfilesinsql", myVersion = "0.4.1";
 
 const fs = require ("fs");
 const utils = require ("daveutils"); 
@@ -25,15 +25,15 @@ function readConfig (f, config, callback) {
 		});
 	}
 
-function getFile (screenname, filename, callback) {
-	const sqltext = "select * from staticfiles where screenname = " + davesql.encode (screenname) + " and filename = " + davesql.encode (filename);
+function getFile (screenname, relpath, flprivate, callback) {
+	const sqltext = "select * from staticfiles where screenname = " + davesql.encode (screenname) + " and relpath = " + davesql.encode (relpath) + " and flprivate = " + davesql.encode (flprivate);
 	davesql.runSqltext (sqltext, function (err, result) {
 		if (err) {
 			callback (err);
 			}
 		else {
 			if (result.length == 0) {
-				const message = "Can't find the file " + filename + " for the user " + screenname + ".";
+				const message = "Can't find the file " + relpath + " for the user " + screenname + ".";
 				callback ({message});
 				}
 			else {
@@ -42,17 +42,19 @@ function getFile (screenname, filename, callback) {
 			}
 		});
 	}
-function saveFile (screenname, filename, filecontents, callback) {
+function publishFile (screenname, relpath, type, flprivate, filecontents, callback) {
 	const now = new Date ();
 	const fileRec = {
 		screenname, 
-		filename, 
+		relpath, 
+		type,
+		flprivate,
 		filecontents,
 		whenCreated: now,
 		whenUpdated: now,
 		ctSaves: 1
 		};
-	getFile (screenname, filename, function (err, theOriginalFile) {
+	getFile (screenname, relpath, flprivate, function (err, theOriginalFile) {
 		if (!err) {
 			fileRec.whenCreated = theOriginalFile.whenCreated;
 			fileRec.ctSaves = theOriginalFile.ctSaves + 1;
@@ -63,7 +65,7 @@ function saveFile (screenname, filename, filecontents, callback) {
 				callback (err);
 				}
 			else {
-				callback (undefined, true);
+				callback (undefined, fileRec);
 				}
 			});
 		});
@@ -78,13 +80,13 @@ for (var i = 1; i <= 15; i++) {
 readConfig ("config.json", config, function ()  {
 	console.log ("config == " + utils.jsonStringify (config));
 	davesql.start (config.database, function () {
-		const screenname = "davewiner", filename = "test.json";
-		saveFile (screenname, filename, utils.jsonStringify (theTestData), function (err, result) {
+		const screenname = "davewiner", relpath = "test.json", flprivate = true;
+		publishFile (screenname, relpath, "application/json", flprivate, utils.jsonStringify (theTestData), function (err, result) {
 			if (err) {
 				console.log (err.message);
 				}
 			else {
-				getFile (screenname, filename, function (err, theFile) {
+				getFile (screenname, relpath, flprivate, function (err, theFile) {
 					console.log (theFile.filecontents);
 					});
 				}
